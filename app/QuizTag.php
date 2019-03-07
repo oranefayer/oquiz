@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class App_user extends Model
+class QuizTag extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'app_users';
+    protected $table = 'quizs_tags';
         /**
      * Indicates if the model should be timestamped.
      *

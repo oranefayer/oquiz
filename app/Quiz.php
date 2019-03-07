@@ -18,4 +18,9 @@ class Quiz extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    public function authors()
+    {
+        return $this->belongsTo('App\AppUser', 'id_author');
+    }
 }

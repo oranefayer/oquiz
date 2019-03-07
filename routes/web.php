@@ -36,22 +36,22 @@ $router->post('/quiz/{id}', [
 ]);
 
 $router->get('/signup', [
-    'as' => 'signup',
+    'as' => 'signupGet',
     'uses' => 'UserController@signupGet'
 ]);
 
 $router->post('/signup', [
-    'as' => 'signup',
+    'as' => 'signupPost',
     'uses' => 'UserController@signupPost'
 ]);
 
 $router->get('/signin', [
-    'as' => 'signin',
+    'as' => 'signinGet',
     'uses' => 'UserController@signinGet'
 ]);
 
 $router->post('/signin', [
-    'as' => 'signin',
+    'as' => 'signinPost',
     'uses' => 'UserController@signinPost'
 ]);
 

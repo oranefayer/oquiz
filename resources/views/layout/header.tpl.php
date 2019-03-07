@@ -19,29 +19,36 @@
 
                     <ul>
                         <li>
-                            <a href="#">
-                            <h1 >O'Quiz</h1>
+                            <a href="<?= route('signinPost') ?>">
+                            <h1 >Home</h1>
                             </a>
                         </li>
                     </ul>
     
                     <ul>
                         <li>
-                            <a href="#">
+<?php if ($connected == false) : ?>
+                            <a href="<?= route('signinPost') ?>">
                                 <i></i>
-                                Accueil
+                                Se connecter
+                            </a>
+
+<?php else : ?>
+                            <a href="<?= route('logout') ?>">
+                                <i></i>
+                                Se déconnecter
                             </a>
                         </li>
-    
+<?php endif ; ?>   
                         <li>
-                            <a href="#">
+                            <a href="<?= route('profile') ?>">
                                 <i></i>
                                 Mon compte
                             </a>
                         </li>
     
                         <li>
-                            <a href="#">
+                            <a href="<?= route('logout') ?>">
                                 <i></i>
                                 Déconnexion
                             </a>

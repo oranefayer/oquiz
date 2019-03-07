@@ -13,15 +13,20 @@ class MainController extends BaseController
 {
     public function home(Request $request) {
 
-        $authors = App\App_user::all();
+        $authors = App\User::all();
         $tags = App\Tag::all();
         $quizzes = App\Quiz::all();
+        $authors= [];
+        foreach ($quizzes as $currentQuiz) {
+            $authorOfQuiz = App\Quiz::find($currentQuiz->id)->authors()->first();
+            $authors[$currentQuiz->id] = $authorOfQuiz;
+        }
 
         return view('home', [
-            'name' => 'home',
-            'authors' => $authors,
+            'name' => 'home',            
             'tags' => $tags,
-            'quizzes' => $quizzes
+            'quizzes' => $quizzes,
+            'authors' => $authors,
         ]);
     }
 

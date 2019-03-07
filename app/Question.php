@@ -18,4 +18,15 @@ class Question extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    public function answers()
+    {
+        return $this->hasMany('App\Answer', 'id_question');
+    }
+
+    public function level()
+    {
+        return $this->belongsTo('App\Level', 'id_level');
+    }
+
 }

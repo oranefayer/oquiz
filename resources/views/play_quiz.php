@@ -1,48 +1,58 @@
 <?php require_once __DIR__.'/layout/header.tpl.php' ; ?>
+
             <div>
-                <h2> Le chocolat - I 
-                    <span>xx questions</span>
+                <h2><?= $quiz->title ?>
+                    <span><?= count($questions) ?> questions</span>
                 </h2>
+            </div>
+            <div>
+
+<?php foreach ($tags as $currentTag) : ?>
+                <h3><?= $currentTag->name ?></h3>
+<?php endforeach ; ?>
+
             </div>
 
             <div>
                 <h4> 
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr.
+                    <?= $quiz->description ?>
                 </h4>
             </div>
 
             <div>
-                <p><?php // ?></p>
+                <p>by <?= $author->first_name ?> <?= $author->last_name ?></p>
             </div>
             
-            <form action="" method="">
+            <form action="<?php route('quizPost') ?>" method="post">
 
-                <div class="row">
 <?php foreach ($questions as $currentQuestion) : ?>
 
-                    <div class="col question">
+                <div class="col question">
 
-                        <span class="level level--beginner"><?= $currentQuestion->id_level ?></span>
+                    <span class="level level--beginner"><?=  $levels[$currentQuestion->id]->name ?></span>
 
-                        <div class="question__question">
-                        <?= $currentQuestion->question ?>
-                        </div>
-
-                        <div class="question__choices">
-    <?php foreach ($questions-> as $currentAnswer) : ?>
-                            <div>
-                                <input type="radio" name="exampleRadios" id="exampleRadios1" value="option1">
-                                <label for="exampleRadios1">
-                                    <?= $currentAnswer->description ?>
-                                </label> 
-                            </div>
-    <?php endforeach ; ?>
-<?php endforeach ; ?>
-                        </div>
+                    <div class="question__question">
+                    <?=  $currentQuestion->question ?>
                     </div>
-                    
-                </div>
-                <div>
+
+                    <div class="question__choices">
+
+    <?php foreach ($answers[$currentQuestion->id] as $currentAnswer) : ?>
+
+                        <div>
+                            <input type="radio" name="exampleRadios" id="exampleRadios1" value="option1">
+                            <label for="exampleRadios1">
+                                <?= $currentAnswer->description ?>
+                            </label> 
+                        </div>
+
+    <?php endforeach ; ?>
+
+                    </div>
+                </div>  
+
+<?php  endforeach ; ?>               
+                
                     <input class="btn" type="submit" value="OK"/>
                 </div>
             </form>
