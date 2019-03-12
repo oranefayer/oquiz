@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use App;
 use Illuminate\Http\Request;
+use App\Tag;
 use Illuminate\Http\Response;
-use Laravel\Lumen\Routing\Controller as BaseController;
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller as BaseController;
 use Log;
 
 class TagController extends BaseController
 {
     public function tag () {
-        $tags = App\Tag::all();
+        $tags = Tag::all();
         return view('tags', [
             'name' => 'Tous les Thèmes',
             'tags' => $tags,

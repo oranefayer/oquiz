@@ -1,6 +1,6 @@
 <?php require_once __DIR__.'/layout/header.tpl.php' ; ?>
             <div>
-                <h2><?= $tag->name ?></h2>
+                <h2>pour le thème <?= $tag->name ?></h2>
             </div>
 
 <?php foreach ($quizzes as $currentQuiz) : ?>
@@ -15,6 +15,5 @@
                 
 <?php endforeach ; ?>
             </div>
-        </main> 
 
 <?php require_once __DIR__.'/layout/footer.tpl.php'?>

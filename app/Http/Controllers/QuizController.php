@@ -3,40 +3,44 @@
 namespace App\Http\Controllers;
 
 use App;
+use App\User;
+use App\Tag;
+use App\Quiz;
+use App\Question;
+use App\QuizTag;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Laravel\Lumen\Routing\Controller as BaseController;
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller as BaseController;
 use Log;
 
 class QuizController extends BaseController
 {
     public function quizGet($id) {
-        $quiz = App\Quiz::where('id', $id)->first();
-        $author = App\User::where('id', $quiz->id_author)->first();
-        $tagsId = App\QuizTag::where('id_quiz', $quiz->id)->get();
-        $questions = App\Question::where('id_quiz', $quiz->id)->inRandomOrder()->get();
+        $quiz = Quiz::where('id', $id)->first();
+        $author = User::where('id', $quiz->id_author)->first();
+        $tagsId = QuizTag::where('id_quiz', $quiz->id)->get();
+        $questions = Question::where('id_quiz', $quiz->id)->get();
 
         $tags = [];
         foreach ($tagsId as $currentTagId) {
-            $tags[$currentTagId->id_tag] = App\Tag::where('id', $currentTagId->id_tag)->first();
+            $tags[$currentTagId->id_tag] = Tag::where('id', $currentTagId->id_tag)->first();
         }
 
         
         $difficultyLevels = [];
         foreach ($questions as $currentQuestion) {
-            $difficultyLevel = App\Question::find($currentQuestion->id)->level()->first();
+            $difficultyLevel = Question::find($currentQuestion->id)->level()->first();
             $difficultyLevels[$currentQuestion->id] = $difficultyLevel;
         }
 
         $answers = [];
         foreach ($questions as $currentQuestion) {
-            $answersforQuestion = App\Question::find($currentQuestion->id)->answers()->get();
+            $answersforQuestion = Question::find($currentQuestion->id)->answers()->inRandomOrder()->get();
             $answers[$currentQuestion->id] = $answersforQuestion;
         }
         
         return view('play_quiz', [
-            'name' => 'Let\'s play!',
+            'name' => 'Que boire ce soir?',
             'quiz' => $quiz,
             'author' => $author,            
             'tags' => $tags,
@@ -47,55 +51,76 @@ class QuizController extends BaseController
     }
 
     public function quizPost(Request $request, $id) {
-        $quiz = App\Quiz::where('id', $id)->first();
-        $author = App\User::where('id', $quiz->id_author)->first();
-        $tagsId = App\QuizTag::where('id_quiz', $quiz->id)->get();
-        $questions = App\Question::where('id_quiz', $quiz->id)->get();
+        $userResponses = $request->input();
+        $wrongAnswers = [] ;
+        $rightAnswers = [];
+        foreach ($userResponses as $currentQuestionId => $currentAnswerId) {
+            $question = Question::where('id', $currentQuestionId)->first();
+            if ($currentAnswerId != $question->id_answer) {
+                $wrongAnswers[$currentQuestionId] = $currentAnswerId;
+            }
+            else {
+            $rightAnswers[$currentQuestionId] = $currentAnswerId;
+            }
+        }
+         
+        $quiz = Quiz::where('id', $id)->first();
+        $author = User::where('id', $quiz->id_author)->first();
+        $tagsId = QuizTag::where('id_quiz', $quiz->id)->get();
+        $questions = Question::where('id_quiz', $quiz->id)->get();
 
         $tags = [];
         foreach ($tagsId as $currentTagId) {
-            $tags[$currentTagId->id_tag] = App\Tag::where('id', $currentTagId->id_tag)->first();
+            $tags[$currentTagId->id_tag] = Tag::where('id', $currentTagId->id_tag)->first();
         }
 
         
         $difficultyLevels = [];
         foreach ($questions as $currentQuestion) {
-            $difficultyLevel = App\Question::find($currentQuestion->id)->level()->first();
+            $difficultyLevel = Question::find($currentQuestion->id)->level()->first();
             $difficultyLevels[$currentQuestion->id] = $difficultyLevel;
         }
 
         $answers = [];
         foreach ($questions as $currentQuestion) {
-            $answersforQuestion = App\Question::find($currentQuestion->id)->answers()->get();
+            $answersforQuestion = Question::find($currentQuestion->id)->answers()->get();
             $answers[$currentQuestion->id] = $answersforQuestion;
         }
-        
-        return view('play_quiz', [
-            'name' => 'Let\'s play!',
+        dump($userResponses);
+        return view('quiz_results', [
+            'name' => 'Resultats',
             'quiz' => $quiz,
             'author' => $author,            
             'tags' => $tags,
             'questions' => $questions,
             'levels' => $difficultyLevels,
-            'answers' => $answers            
+            'answers' => $answers,
+            'score' => count($rightAnswers),
+            'classAnswer' => '',
+            'goodAnswers' => $rightAnswers,
+            'badAnswers' => $wrongAnswers   
         ]);
     }
 
     public function listByTag($id) {
-        $tag = App\Tag::where('id', $id)->first();
-        $tagQuiz = App\Quiz_tag::where('id_tag', $id)->get();
-        $quizzes = App\Quiz::where('id', $tagQuiz->id_quiz)->get();
+        $tag = Tag::where('id', $id)->first();
+        $tagQuiz = QuizTag::where('id_tag', $id)->get();
+
+        $quizListByTag = [];
+        foreach ($tagQuiz as $currentTagQuiz) {
+            $quizListByTag[]= Quiz::where('id', $currentTagQuiz->id_quiz)->first();
+        }
 
         $authors = [];
-        foreach ($quizzes as $currentQuiz) {
-        $authorOfQuiz = App\User::where('id', $currentQuiz->id_author)->first();
-        $authors[$currentQuiz->id] = $authorOfQuiz;
-
+        foreach ($quizListByTag as $currentQuiz) {
+            $authorOfQuiz = User::where('id', $currentQuiz->id_author)->first();
+            $authors[$currentQuiz->id] = $authorOfQuiz;
+        }
         
         
-        return view('quizList', [
+        return view('quiz_by_tag', [
             'name' => 'Tous les Quizs',
-            'tag' => $tagName,
+            'tag' => $tag,
             'authors' => $authors,
             'quizzes' => $quizListByTag,
         ]);

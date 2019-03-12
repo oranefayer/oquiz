@@ -1,8 +1,9 @@
 <?php require_once __DIR__.'/layout/header.tpl.php' ; ?>
 
+
         <div>
             <h2><?= $quiz->title ?>
-                <h3><?= count($questions) ?> questions</h3>
+                <span class="score<?= $scoreclass = $score >= (count($questions)/2) ? ' good' : ' bad' ; ?>"><?= $score ?>/<?= count($questions) ?></span>
             </h2>
         </div>
         <div>
@@ -25,24 +26,26 @@
         
         <form action="<?php route('quizPost') ?>" method="post">
 <?php foreach ($questions as $currentQuestion) : ?>
-            <div class="col question">
-                <span class="level level--beginner"><?=  $levels[$currentQuestion->id]->name ?></span>
-                <p class="question__question">
+            <div class="question-wrapper">
+                <span class="question-level"><?=  $levels[$currentQuestion->id]->name ?></span>
+                <p class="question-text">
                     <?=  $currentQuestion->question ?>
                 </p>
 
-                <ul class="question__choices">
+                <div class="question-choices">
+                    <ul>
     <?php foreach ($answers[$currentQuestion->id] as $currentAnswer) : ?>
-                    <li>
-                        <input type="radio" name="<?= $currentQuestion->id?>" id="<?= $currentQuestion->id ?>-<?= $currentAnswer->id ?>" value="<?= $currentAnswer->id ?>">
-                        <label for="<?= $currentQuestion->id ?>-<?= $currentAnswer->id ?>">
-                            <?= $currentAnswer->description ?>
-                        </label> 
-                    </li>
+    <?php $classAnswer = ''; ?>
+        <?php if ($currentAnswer->id == $currentQuestion->id_answer) {$classAnswer = 'right';} ?>
+        <?php if (array_key_exists($currentQuestion->id, $badAnswers) && $currentAnswer->id == $badAnswers[$currentQuestion->id]) { $classAnswer = 'wrong' ;} ?>  
+                        <li class="<?= $classAnswer ?>"><?= $currentAnswer->description ?></li>                
     <?php endforeach ; ?>
-                </ul>
+                    </ul>
+                </div>
+                <p class="question-anecdote">
+                    <?=  $currentQuestion->anecdote ?>
+                </p>
             </div>
-            <i class="fas fa-caret-left"></i><i class="fas fa-caret-right"></i>
 <?php  endforeach ; ?>
             <div>
                 <button type="submit">GO<img src="<?= route('home') ?> /pictures/drink_carrousel.gif"/></button>
