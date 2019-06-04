@@ -4,16 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class Question extends Model
 {
-
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'app_users';
-
+    protected $table = 'questions';
         /**
      * Indicates if the model should be timestamped.
      *
@@ -21,8 +19,14 @@ class User extends Model
      */
     public $timestamps = false;
 
-    public function authors()
+    public function answers()
     {
-        return $this->hasMany('App\Quiz', 'id_author');
+        return $this->hasMany('App\Answer', 'id_question');
     }
+
+    public function level()
+    {
+        return $this->belongsTo('App\Level', 'id_level');
+    }
+
 }

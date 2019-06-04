@@ -1,0 +1,125 @@
+/***** GERERAL DESIGN ****/
+body {
+    background-color: rgb(32, 32, 32);
+    color : white;
+    /*font-family: 'Cherry Cream Soda', cursive;*/
+    font-family: 'Londrina Solid', cursive; 
+}
+
+.global-wrapper {
+    width : 90vw;
+    margin: 1rem auto;
+    padding: 2rem;
+    background-color: #3b3b3b;
+    border-radius: 2em;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+a {
+    line-height: 1.2em;  
+    letter-spacing: 2px;
+    font-weight: 400;
+    transition: all 1s ease;
+}
+
+a:hover,
+a:active {
+    cursor: pointer;
+    letter-spacing: 3px;    
+    font-weight: 500;
+}
+
+
+/* SCROLLBAR */
+/* width */
+::-webkit-scrollbar {
+    width: 7px;
+    margin: 2px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #262727; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgb(78, 78, 80); 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(134, 136, 138); 
+}
+
+
+/***** HEADER ****/
+header .banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.banner img {
+    max-width: 15rem;
+}
+
+.hidden {
+    display: none;
+}
+
+.user-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/***** NAV ****/
+nav i:hover{
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+@keyframes shake {
+    10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+
+    20%, 80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%, 50%, 70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%, 60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}
+
+/***** FOOTER ****/
+
+/***** QUIZ ****/
+
+.wrong {
+    color: rgb(202, 74, 74);
+    text-decoration: line-through;
+}
+
+.right {
+    color: rgb(72, 199, 104);
+    
+}
+
+.right:before {
+    content: "✔";
+}
+
+
+
